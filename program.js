@@ -1,3 +1,8 @@
+bash
+
+cat /home/claude/athlete-app/program.js
+Sortie
+
 const SUPABASE_URL = 'https://yraxajmpsjxdmxydyedn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyYXhham1wc2p4ZG14eWR5ZWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMDczOTMsImV4cCI6MjA5MTU4MzM5M30.VwOO-9C9TCSc03uLMxt5ftNSW7n2fFd3HIPf6Ia-DAU';
 const USER_ID = 'jonathan';
@@ -92,15 +97,15 @@ const PROGRAM = {
       { id:'leg_press',         name:'Leg press',                   kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
       { id:'leg_ext',           name:'Leg extension',
-        series:iso(4), reps:{iso:[10,15]} },
+        series:iso(3), reps:{iso:[10,15]} },
       { id:'fentes_mer',        name:'Fentes bulgares',
         series:iso(3), reps:{iso:[10,12]} },
       { id:'hip_thrust',        name:'Hip thrust',                  kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
       { id:'leg_curl',          name:'Leg curl',
-        series:iso(4), reps:{iso:[10,15]} },
+        series:iso(3), reps:{iso:[10,15]} },
       { id:'abducteurs',        name:'Abducteurs',
-        series:iso(4), reps:{iso:[12,15]} },
+        series:iso(3), reps:{iso:[12,15]} },
       { id:'mollets',           name:'Mollets machine',
         series:iso(3), reps:{iso:[12,15]} },
     ]
@@ -329,3 +334,11 @@ function getTodayDayKey() {
   const map = { 1:'lundi', 2:'mardi', 3:'mercredi', 4:null, 5:'vendredi', 6:'samedi', 0:'dimanche' };
   return map[dow] || 'lundi';
 }
+Terminé
+Voilà le contenu complet de program.js — copie tout ce texte depuis le début jusqu'à la fin et colle-le dans l'éditeur GitHub après avoir sélectionné tout l'ancien contenu (Cmd+A).
+
+Ensuite fais pareil pour app.js — tu veux que je te le donne aussi ? 💪
+
+
+
+  
