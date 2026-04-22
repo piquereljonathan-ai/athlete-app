@@ -328,11 +328,7 @@ function getTodayDayKey() {
   const dow = new Date().getDay(); // 0=dim, 1=lun...
   const map = { 1:'lundi', 2:'mardi', 3:'mercredi', 4:null, 5:'vendredi', 6:'samedi', 0:'dimanche' };
   return map[dow] || 'lundi';
-}
-Terminé
-Voilà le contenu complet de program.js — copie tout ce texte depuis le début jusqu'à la fin et colle-le dans l'éditeur GitHub après avoir sélectionné tout l'ancien contenu (Cmd+A).
 
-Ensuite fais pareil pour app.js — tu veux que je te le donne aussi ? 💪
 
 
 
