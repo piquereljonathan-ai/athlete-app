@@ -1,8 +1,3 @@
-bash
-
-cat /home/claude/athlete-app/program.js
-Sortie
-
 const SUPABASE_URL = 'https://yraxajmpsjxdmxydyedn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyYXhham1wc2p4ZG14eWR5ZWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMDczOTMsImV4cCI6MjA5MTU4MzM5M30.VwOO-9C9TCSc03uLMxt5ftNSW7n2fFd3HIPf6Ia-DAU';
 const USER_ID = 'jonathan';
