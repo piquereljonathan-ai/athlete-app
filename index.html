@@ -28,7 +28,7 @@ html,body{background:var(--bg0)}
 .wn-arr{font-size:18px;color:var(--ac);font-weight:700;cursor:pointer;line-height:1;padding:0 3px;user-select:none}
 .wn-c{text-align:center}.wn-week{font-size:12px;font-weight:700;color:var(--t0)}.wn-dates{font-size:9px;color:var(--t3);margin-top:1px}
 .wn-deload{font-size:9px;color:var(--am);font-weight:700;margin-top:1px;display:none}
-.week-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:0 0 5px}
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:0 0 5px}
 .ws-day{border-radius:5px;padding:4px 2px;text-align:center;cursor:pointer;border:0.5px solid transparent}
 .ws-day.done{background:var(--gr-d);border-color:#1A2A1A}.ws-day.pr{background:var(--go-d);border-color:#3A2A00}.ws-day.cur{border-color:var(--ac);background:var(--ac-d)}.ws-day.fut{opacity:.22}
 .wsd-l{font-size:8px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px}
@@ -91,9 +91,9 @@ html,body{background:var(--bg0)}
 .sr-time{font-size:13px;font-weight:700;color:var(--ac)}.sr-kcal{font-size:10px;color:var(--am);font-weight:700;margin-top:2px}
 .end-btn{width:100%;margin-top:6px;padding:12px;background:var(--ac-d);border:0.5px solid var(--ac);border-radius:8px;font-size:12px;font-weight:700;color:var(--ac);cursor:pointer;text-transform:uppercase;letter-spacing:.03em}
 /* FOCUS */
-.focus-screen,.hist-screen,.end-screen,.settings-screen,.gainage-screen{display:none;flex-direction:column;height:100vh;background:var(--bg0);position:absolute;inset:0}
-.focus-screen.on,.hist-screen.on,.end-screen.on,.settings-screen.on,.gainage-screen.on{display:flex}
-.end-screen{z-index:70;overflow-y:auto}.settings-screen{z-index:80}.gainage-screen{z-index:60}
+.focus-screen,.hist-screen,.end-screen,.settings-screen,.gainage-screen,.mobilite-screen{display:none;flex-direction:column;height:100vh;background:var(--bg0);position:absolute;inset:0}
+.focus-screen.on,.hist-screen.on,.end-screen.on,.settings-screen.on,.gainage-screen.on,.mobilite-screen.on{display:flex}
+.end-screen{z-index:70;overflow-y:auto}.settings-screen{z-index:80}.gainage-screen{z-index:60}.mobilite-screen{z-index:60}
 .f-top{background:var(--bg1);padding:env(safe-area-inset-top,10px) 14px 9px;border-bottom:0.5px solid var(--bd);flex-shrink:0;display:flex;align-items:center;gap:9px}
 .f-back{font-size:22px;color:var(--ac);font-weight:700;cursor:pointer;line-height:1;flex-shrink:0}
 .f-title{font-size:13px;font-weight:700;color:var(--t0);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -360,6 +360,11 @@ html,body{background:var(--bg0)}
 <div class="gainage-screen" id="gainage-screen">
   <div class="g-top"><div class="f-back" onclick="closeGainage()">←</div><div class="f-title">Gainage — 8 min</div></div>
   <div class="g-body" id="g-body"></div>
+</div>
+<!-- MOBILITE -->
+<div class="mobilite-screen" id="mobilite-screen">
+  <div class="g-top"><div class="f-back" onclick="closeMobilite()">←</div><div class="f-title">🧘 Mobilité — ~22 min</div></div>
+  <div class="g-body" id="m-body"></div>
 </div>
 <!-- HISTORY -->
 <div class="hist-screen" id="hist-screen">

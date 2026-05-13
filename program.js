@@ -15,19 +15,43 @@ const CARDIO_KCAL = {
   velo:  { faible:200, moderee:280, intense:360 },
 };
 
-// ── GAINAGE PROTOCOL ─────────────────────────────────────────────────────────
-// 45s effort · 15s repos · ordre optimal science + vidéo
+// ── GAINAGE PROTOCOL ──────────────────────────────────────────────────────────
 const GAINAGE_PROTOCOL = [
-  { id:'planche_coudes',    name:'Planche sur les coudes',       work:45, rest:15, tip:'Corps droit · abdos contractés · respire normalement' },
-  { id:'dead_bug',          name:'Dead bug',                      work:45, rest:15, tip:'Dos plaqué au sol · bras et jambe opposés · contrôle total' },
-  { id:'planche_lat_g',     name:'Planche latérale gauche',       work:45, rest:15, tip:'Hanche haute · corps aligné · bras tendu ou coude' },
-  { id:'planche_lat_d',     name:'Planche latérale droite',       work:45, rest:15, tip:'Hanche haute · corps aligné · bras tendu ou coude' },
-  { id:'planche_bras',      name:'Planche bras tendus',           work:45, rest:15, tip:'Mains sous épaules · abdos serrés · pas de cambrure' },
-  { id:'gainage_dos',       name:'Gainage sur le dos',            work:45, rest:15, tip:'Épaules décollées · bras au ciel · jambes à 90° · lombaires au sol' },
-  { id:'planche_avancees',  name:'Planche coudes avancés',        work:45, rest:15, tip:'Coudes devant les épaules · tension maximale · respire' },
-  { id:'banane_dynamique',  name:'Banane dynamique',              work:45, rest:15, tip:'Mouvement contrôlé · recrutement total · finisseur' },
+  { id:'planche_coudes',   name:'Planche sur les coudes',    work:45, rest:15, tip:'Corps droit · abdos contractés · respire normalement' },
+  { id:'dead_bug',         name:'Dead bug',                   work:45, rest:15, tip:'Dos plaqué au sol · bras et jambe opposés · contrôle total' },
+  { id:'planche_lat_g',    name:'Planche latérale gauche',    work:45, rest:15, tip:'Hanche haute · corps aligné · bras tendu ou coude' },
+  { id:'planche_lat_d',    name:'Planche latérale droite',    work:45, rest:15, tip:'Hanche haute · corps aligné · bras tendu ou coude' },
+  { id:'planche_bras',     name:'Planche bras tendus',        work:45, rest:15, tip:'Mains sous épaules · abdos serrés · pas de cambrure' },
+  { id:'gainage_dos',      name:'Gainage sur le dos',         work:45, rest:15, tip:'Épaules décollées · bras au ciel · jambes à 90° · lombaires au sol' },
+  { id:'planche_avancees', name:'Planche coudes avancés',     work:45, rest:15, tip:'Coudes devant les épaules · tension maximale · respire' },
+  { id:'banane_dynamique', name:'Banane dynamique',           work:45, rest:15, tip:'Mouvement contrôlé · recrutement total · finisseur' },
 ];
-// Total : 8 exos × 60s = 8 min pile
+
+// ── MOBILITÉ PROTOCOL JEUDI ───────────────────────────────────────────────────
+// Science-based · 60–90s par position · ~22 min total
+const MOBILITE_PROTOCOL = [
+  // BLOC 1 — Hanches & Fléchisseurs
+  { id:'fente_basse_g',  name:'Fente basse — gauche',              work:60, rest:10, bloc:'🦵 Hanches & Fléchisseurs', tip:'Genou arrière au sol · hanches vers l\'avant · dos droit · sens l\'étirement du fléchisseur de hanche' },
+  { id:'fente_basse_d',  name:'Fente basse — droite',              work:60, rest:10, bloc:'🦵 Hanches & Fléchisseurs', tip:'Genou arrière au sol · hanches vers l\'avant · dos droit · sens l\'étirement du fléchisseur de hanche' },
+  { id:'pigeon_g',       name:'Pigeon au sol — gauche',            work:90, rest:10, bloc:'🦵 Hanches & Fléchisseurs', tip:'Jambe avant à 90° · hanche au sol · laisse tomber le poids · respire profondément · relâche' },
+  { id:'pigeon_d',       name:'Pigeon au sol — droite',            work:90, rest:10, bloc:'🦵 Hanches & Fléchisseurs', tip:'Jambe avant à 90° · hanche au sol · laisse tomber le poids · respire profondément · relâche' },
+  { id:'worlds_g',       name:'World\'s Greatest Stretch — gauche',work:45, rest:10, bloc:'🦵 Hanches & Fléchisseurs', tip:'Pied en avant · coude au sol · rotation thoracique · bras vers le ciel · 5 reps lentes et contrôlées' },
+  { id:'worlds_d',       name:'World\'s Greatest Stretch — droite',work:45, rest:10, bloc:'🦵 Hanches & Fléchisseurs', tip:'Pied en avant · coude au sol · rotation thoracique · bras vers le ciel · 5 reps lentes et contrôlées' },
+  // BLOC 2 — Thoracique & Épaules
+  { id:'thread_g',       name:'Thread the Needle — gauche',        work:45, rest:10, bloc:'🫁 Thoracique & Épaules', tip:'À 4 pattes · glisse le bras sous le corps · épaule au sol · rotation thoracique maximale · expire' },
+  { id:'thread_d',       name:'Thread the Needle — droite',        work:45, rest:10, bloc:'🫁 Thoracique & Épaules', tip:'À 4 pattes · glisse le bras sous le corps · épaule au sol · rotation thoracique maximale · expire' },
+  { id:'pec_doorway',    name:'Étirement pectoraux',               work:60, rest:10, bloc:'🫁 Thoracique & Épaules', tip:'Bras à 90° contre un mur · tourne le corps opposé · sens l\'ouverture du pec · contre la rétraction' },
+  { id:'cat_cow',        name:'Cat-Cow',                            work:60, rest:10, bloc:'🫁 Thoracique & Épaules', tip:'À 4 pattes · dos rond puis creux · lent et contrôlé · 10 respirations · décompression vertébrale' },
+  // BLOC 3 — Ischios & Dos
+  { id:'ischio_g',       name:'Étirement ischio — gauche',         work:60, rest:10, bloc:'🔙 Ischios & Dos', tip:'Jambe tendue devant · buste droit vers l\'avant · pas arrondir le dos · sens l\'étirement arrière cuisse' },
+  { id:'ischio_d',       name:'Étirement ischio — droite',         work:60, rest:10, bloc:'🔙 Ischios & Dos', tip:'Jambe tendue devant · buste droit vers l\'avant · pas arrondir le dos · sens l\'étirement arrière cuisse' },
+  { id:'child_pose',     name:'Child\'s Pose',                      work:60, rest:10, bloc:'🔙 Ischios & Dos', tip:'Genoux écartés · bras tendus devant · front au sol · décompression lombaire · essentiel à 1m93' },
+  // BLOC 4 — Cheville & Mollets
+  { id:'cheville_g',     name:'Mobilisation cheville — gauche',    work:45, rest:10, bloc:'🦶 Cheville & Mollets', tip:'Pied à 10cm d\'un mur · genou touche le mur · talon au sol · 10 reps · améliore la profondeur du squat' },
+  { id:'cheville_d',     name:'Mobilisation cheville — droite',    work:45, rest:10, bloc:'🦶 Cheville & Mollets', tip:'Pied à 10cm d\'un mur · genou touche le mur · talon au sol · 10 reps · améliore la profondeur du squat' },
+  { id:'mollet_g',       name:'Étirement mollet — gauche',         work:45, rest:10, bloc:'🦶 Cheville & Mollets', tip:'Jambe arrière tendue · talon au sol · appuie sur le mur · puis genou légèrement fléchi (soléaire)' },
+  { id:'mollet_d',       name:'Étirement mollet — droite',         work:45, rest:10, bloc:'🦶 Cheville & Mollets', tip:'Jambe arrière tendue · talon au sol · appuie sur le mur · puis genou légèrement fléchi (soléaire)' },
+];
 
 // ── CARDIO PRESETS ────────────────────────────────────────────────────────────
 const CARDIO_PRESETS = {
@@ -37,9 +61,7 @@ const CARDIO_PRESETS = {
 };
 
 // ── HELPERS SÉRIES ────────────────────────────────────────────────────────────
-// BASE lourd : Top+BO1+BO2
 const BASE_H = [{ l:'Top',isTop:true },{ l:'BO1',isBO:true },{ l:'BO2',isBO:true }];
-// ISO : n séries numérotées
 const iso = n => Array.from({length:n},(_,i)=>({l:`${i+1}`}));
 
 // ── PROGRAMME ─────────────────────────────────────────────────────────────────
@@ -48,136 +70,157 @@ const PROGRAM = {
   lundi:{
     label:'Lun', name:'Pull Lourd', sub:'Dos · Biceps', type:'h',
     exos:[
-      { id:'tirage_serre',      name:'Tirage serré',                kpi:true,
+      { id:'tirage_serre',     name:'Tirage serré',               kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'rowing_unilat',     name:'Rowing machine (bras/bras)',  kpi:true, note:'Un poids = 2 bras',
+      { id:'rowing_unilat',    name:'Rowing machine (bras/bras)', kpi:true, note:'Un poids = 2 bras',
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'tirage_vert_u',     name:'Tirage vertical unilatéral',  note:'Bras par bras',
+      { id:'tirage_vert_u',    name:'Tirage vertical unilatéral', note:'Bras par bras',
         series:iso(4), reps:{iso:[10,15]} },
-      { id:'tirage_horiz',      name:'Tirage horizontal',
+      { id:'tirage_horiz',     name:'Tirage horizontal',
         series:iso(4), reps:{iso:[10,15]} },
-      { id:'pullover',          name:'Pull over poulie haute',
+      { id:'pullover',         name:'Pull over poulie haute',
         series:iso(4), reps:{iso:[10,15]} },
-      { id:'curl_halt',         name:'Curl haltères',
+      { id:'curl_halt',        name:'Curl haltères',
         series:iso(4), reps:{iso:[10,15]} },
+    ],
+    abdosExos:[
+      { id:'leg_raises_lun',   name:'Leg raises',    series:iso(3), reps:{iso:[12,15]}, note:'Jambes tendues · montée lente · bas du ventre' },
+      { id:'rev_crunch_lun',   name:'Reverse crunch',series:iso(3), reps:{iso:[12,15]}, note:'Bascule du bassin · pas d\'élan · bas du ventre' },
     ]
   },
 
   mardi:{
     label:'Mar', name:'Push Lourd', sub:'Pecs · Épaules · Triceps', type:'h',
     exos:[
-      { id:'dev_couche',        name:'Développé couché',            kpi:true,
+      { id:'dev_couche',       name:'Développé couché',           kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'dev_incline',       name:'Développé incliné',           kpi:true,
+      { id:'dev_incline',      name:'Développé incliné',          kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'dev_militaire',     name:'Développé militaire machine', kpi:true,
+      { id:'dev_militaire',    name:'Développé militaire machine',kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'pec_deck',          name:'Pec deck',
+      { id:'pec_deck',         name:'Pec deck',
         series:iso(3), reps:{iso:[10,15]} },
-      { id:'rear_delt',         name:'Oiseau / Rear delt',
+      { id:'rear_delt',        name:'Oiseau / Rear delt',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'elev_lat',          name:'Élévations latérales',        kpi:true,
+      { id:'elev_lat',         name:'Élévations latérales',       kpi:true,
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'triceps_poulie',    name:'Triceps poulie corde',
+      { id:'triceps_poulie',   name:'Triceps poulie corde',
         series:iso(4), reps:{iso:[10,15]} },
+    ],
+    abdosExos:[
+      { id:'leg_raises_mar',   name:'Leg raises',    series:iso(3), reps:{iso:[12,15]}, note:'Jambes tendues · montée lente · bas du ventre' },
+      { id:'rev_crunch_mar',   name:'Reverse crunch',series:iso(3), reps:{iso:[12,15]}, note:'Bascule du bassin · pas d\'élan · bas du ventre' },
     ]
   },
 
   mercredi:{
-    label:'Mer', name:'Legs Lourd', sub:'Jambes · Gainage · Cardio', type:'h',
-    gainage:true, cardio:true,
+    label:'Mer', name:'Legs Lourd', sub:'Jambes · Gainage', type:'h',
+    gainage:true,
     exos:[
-      { id:'hack_squat',        name:'Hack squat',                  kpi:true,
+      { id:'hack_squat',         name:'Hack squat',                 kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'leg_press',         name:'Leg press',                   kpi:true,
+      { id:'leg_press',          name:'Leg press',                  kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'leg_ext',           name:'Leg extension',
-        series:iso(3), reps:{iso:[10,15]} },
-      { id:'fentes_mer',        name:'Fentes bulgares',
-        series:iso(3), reps:{iso:[10,12]} },
-      { id:'hip_thrust',        name:'Hip thrust',                  kpi:true,
+      { id:'hip_thrust',         name:'Hip thrust',                 kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'leg_curl',          name:'Leg curl',
-        series:iso(3), reps:{iso:[10,15]} },
-      { id:'abducteurs',        name:'Abducteurs',
-        series:iso(3), reps:{iso:[12,15]} },
-      { id:'mollets',           name:'Mollets machine',
-        series:iso(3), reps:{iso:[12,15]} },
+      { id:'rdl',                name:'Romanian Deadlift (RDL)',
+        series:iso(3), reps:{iso:[10,12]}, note:'Dos droit · hanches arrière · sens l\'étirement ischios/fessiers' },
+      { id:'leg_curl',           name:'Leg curl',                   supersetGroup:'A', supersetLabel:'SS A',
+        series:iso(2), reps:{iso:[10,15]} },
+      { id:'cable_kickback_mer', name:'Cable kickback',             supersetGroup:'A', supersetLabel:'SS A',
+        series:iso(2), reps:{iso:[15,15]}, note:'Concentration fessiers · amplitude complète' },
+      { id:'abducteurs',         name:'Abducteurs',                 supersetGroup:'B', supersetLabel:'SS B',
+        series:iso(2), reps:{iso:[12,15]} },
+      { id:'mollets',            name:'Mollets machine',            supersetGroup:'B', supersetLabel:'SS B',
+        series:iso(2), reps:{iso:[12,15]} },
+    ],
+    abdosExos:[
+      { id:'leg_raises_mer',   name:'Leg raises',    series:iso(3), reps:{iso:[12,15]}, note:'Jambes tendues · montée lente · bas du ventre' },
+      { id:'rev_crunch_mer',   name:'Reverse crunch',series:iso(3), reps:{iso:[12,15]}, note:'Bascule du bassin · pas d\'élan · bas du ventre' },
     ]
   },
 
+  jeudi:{
+    label:'Jeu', name:'Mobilité', sub:'Hanches · Thoracique · Ischios · Cheville', type:'m',
+    mobilite:true,
+  },
+
   vendredi:{
-    label:'Ven', name:'Pull Léger', sub:'Dos · Biceps · Gainage · Cardio', type:'l',
-    gainage:true, cardio:true,
+    label:'Ven', name:'Pull Léger', sub:'Dos · Biceps · Gainage', type:'l',
+    gainage:true,
     exos:[
-      { id:'tirage_serre_l',    name:'Tirage serré',                refKpi:'tirage_serre',
+      { id:'tirage_serre_l',   name:'Tirage serré',               refKpi:'tirage_serre',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'rowing_unilat_l',   name:'Rowing machine (bras/bras)',  refKpi:'rowing_unilat', note:'Un poids = 2 bras',
+      { id:'rowing_unilat_l',  name:'Rowing machine (bras/bras)', refKpi:'rowing_unilat', note:'Un poids = 2 bras',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'tirage_vert_ul',    name:'Tirage vertical unilatéral',  refKpi:'tirage_vert_u', note:'Bras par bras',
+      { id:'tirage_vert_ul',   name:'Tirage vertical unilatéral', refKpi:'tirage_vert_u', note:'Bras par bras',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'tirage_horiz_l',    name:'Tirage horizontal',           refKpi:'tirage_horiz',
+      { id:'tirage_horiz_l',   name:'Tirage horizontal',          refKpi:'tirage_horiz',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'pullover_l',        name:'Pull over poulie haute',      refKpi:'pullover',
+      { id:'pullover_l',       name:'Pull over poulie haute',     refKpi:'pullover',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'curl_halt_l',       name:'Curl haltères',               refKpi:'curl_halt',
+      { id:'curl_halt_l',      name:'Curl haltères',              refKpi:'curl_halt',
         series:iso(4), reps:{iso:[12,15]} },
-      { id:'rear_delt_l',       name:'Oiseau / Rear delt',          refKpi:'rear_delt',
+      { id:'rear_delt_l',      name:'Oiseau / Rear delt',         refKpi:'rear_delt',
         series:iso(3), reps:{iso:[12,15]} },
+    ],
+    abdosExos:[
+      { id:'leg_raises_ven',   name:'Leg raises',    series:iso(3), reps:{iso:[12,15]}, note:'Jambes tendues · montée lente · bas du ventre' },
+      { id:'rev_crunch_ven',   name:'Reverse crunch',series:iso(3), reps:{iso:[12,15]}, note:'Bascule du bassin · pas d\'élan · bas du ventre' },
     ]
   },
 
   samedi:{
-    label:'Sam', name:'Push Léger', sub:'Pecs · Épaules · Bras · Abdos', type:'l',
+    label:'Sam', name:'Push Léger', sub:'Pecs · Épaules · Triceps · Abdos', type:'l',
     gainage:true, abdos:true,
     exos:[
-      { id:'dev_couche_bl',     name:'Développé couché',            isBarre:true, isBloc:true,
+      { id:'dev_couche_bl',    name:'Développé couché',           isBarre:true, isBloc:true,
         series:iso(4), reps:{bloc:[6,15]}, blocZones:[[12,15],[10,13],[8,11],[6,9]] },
-      { id:'dev_incline_bl',    name:'Développé incliné',           isBarre:true, isBloc:true,
+      { id:'dev_incline_bl',   name:'Développé incliné',          isBarre:true, isBloc:true,
         series:iso(4), reps:{bloc:[6,15]}, blocZones:[[12,15],[10,13],[8,11],[6,9]] },
-      { id:'dev_milit_l',       name:'Développé militaire machine', refKpi:'dev_militaire',
+      { id:'dev_milit_l',      name:'Développé militaire machine',refKpi:'dev_militaire',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'pec_deck_l',        name:'Pec deck',                    refKpi:'pec_deck',
+      { id:'pec_deck_l',       name:'Pec deck',                   refKpi:'pec_deck',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'rear_delt_s',       name:'Oiseau / Rear delt',          refKpi:'rear_delt',
+      { id:'elev_lat_l',       name:'Élévations latérales',       refKpi:'elev_lat',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'elev_lat_l',        name:'Élévations latérales',        refKpi:'elev_lat',
-        series:iso(3), reps:{iso:[12,15]} },
-      { id:'triceps_l',         name:'Triceps poulie',              refKpi:'triceps_poulie',
-        series:iso(4), reps:{iso:[12,15]} },
-      { id:'curl_s',            name:'Curl haltères',               refKpi:'curl_halt',
+      { id:'triceps_l',        name:'Triceps poulie',             refKpi:'triceps_poulie',
         series:iso(4), reps:{iso:[12,15]} },
     ],
     abdosExos:[
-      { id:'crunchs_s',         name:'Crunchs machine',             series:iso(3), reps:{iso:[15,20]} },
-      { id:'rotation_s',        name:'Rotation buste machine',      series:iso(3), reps:{iso:[15,15]}, note:'15 reps / côté' },
-      { id:'leg_raises_s',      name:'Leg raises',                  series:iso(3), reps:{iso:[10,15]} },
+      { id:'crunchs_s',        name:'Crunchs machine',            series:iso(3), reps:{iso:[15,20]} },
+      { id:'rotation_s',       name:'Rotation buste machine',     series:iso(3), reps:{iso:[15,15]}, note:'15 reps / côté' },
+      { id:'leg_raises_s',     name:'Leg raises',                 series:iso(3), reps:{iso:[10,15]}, note:'Jambes tendues · bas du ventre' },
     ]
   },
 
   dimanche:{
-    label:'Dim', name:'Legs Léger', sub:'Jambes · Abdos · Cardio', type:'c',
-    gainage:true, abdos:true, cardio:true,
+    label:'Dim', name:'Legs Léger', sub:'Jambes · Abdos', type:'c',
+    gainage:true, abdos:true,
     exos:[
-      { id:'hack_squat_l',      name:'Hack squat',                  refKpi:'hack_squat',
+      { id:'hack_squat_l',       name:'Hack squat',               refKpi:'hack_squat',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'leg_press_l',       name:'Leg press',                   refKpi:'leg_press',
+      { id:'leg_press_unilat',   name:'Leg press unilatéral',     refKpi:'leg_press', note:'1 jambe à la fois · amplitude complète · corrige les déséquilibres',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'leg_ext_l',         name:'Leg extension',               refKpi:'leg_ext',
+      { id:'hip_thrust_l',       name:'Hip thrust',               refKpi:'hip_thrust',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'hip_thrust_l',      name:'Hip thrust',                  refKpi:'hip_thrust',
+      { id:'fentes_dim',         name:'Fentes bulgares',
+        series:iso(3), reps:{iso:[10,12]} },
+      { id:'leg_ext_l',          name:'Leg extension',            refKpi:'leg_ext', supersetGroup:'A', supersetLabel:'SS A',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'leg_curl_l',        name:'Leg curl',                    refKpi:'leg_curl',
+      { id:'cable_kickback_dim', name:'Cable kickback',           supersetGroup:'A', supersetLabel:'SS A',
+        series:iso(3), reps:{iso:[15,15]}, note:'Concentration fessiers · amplitude complète' },
+      { id:'leg_curl_l',         name:'Leg curl',                 refKpi:'leg_curl', supersetGroup:'B', supersetLabel:'SS B',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'abducteurs_l',      name:'Abducteurs',
-        series:iso(3), reps:{iso:[12,15]} },
-      { id:'mollets_l',         name:'Mollets machine',             refKpi:'mollets',
+      { id:'mollets_l',          name:'Mollets machine',          refKpi:'mollets', supersetGroup:'B', supersetLabel:'SS B',
         series:iso(2), reps:{iso:[12,15]} },
+      { id:'abducteurs_l',       name:'Abducteurs',
+        series:iso(3), reps:{iso:[12,15]} },
     ],
     abdosExos:[
-      { id:'crunchs_d',         name:'Crunchs machine',             series:iso(3), reps:{iso:[15,20]} },
-      { id:'rotation_d',        name:'Rotation buste machine',      series:iso(3), reps:{iso:[15,15]}, note:'15 reps / côté' },
-      { id:'leg_raises_d',      name:'Leg raises',                  series:iso(3), reps:{iso:[10,15]} },
+      { id:'crunchs_d',          name:'Crunchs machine',          series:iso(3), reps:{iso:[15,20]} },
+      { id:'rotation_d',         name:'Rotation buste machine',   series:iso(3), reps:{iso:[15,15]}, note:'15 reps / côté' },
+      { id:'leg_raises_d',       name:'Leg raises',               series:iso(3), reps:{iso:[10,15]}, note:'Jambes tendues · bas du ventre' },
     ]
   },
 };
@@ -204,20 +247,22 @@ const MILESTONES = {
   tirage_serre: [{kg:40,l:'40kg'},{kg:60,l:'60kg'},{kg:80,l:'80kg'},{kg:100,l:'100kg'}],
   curl_halt:    [{kg:14,l:'14kg'},{kg:18,l:'18kg'},{kg:22,l:'22kg'},{kg:26,l:'26kg'}],
   elev_lat:     [{kg:12,l:'12kg'},{kg:16,l:'16kg'},{kg:20,l:'20kg'},{kg:24,l:'24kg'}],
+  rdl:          [{kg:40,l:'40kg'},{kg:60,l:'60kg'},{kg:80,l:'80kg'},{kg:100,l:'100kg'}],
 };
 
 // ── ACHIEVEMENTS ──────────────────────────────────────────────────────────────
 const ACHIEVEMENTS = [
-  { id:'first_session',  icon:'⚡', name:'Premier raid',        desc:'Première séance enregistrée' },
-  { id:'streak_4',       icon:'🔥', name:'Sans faille',         desc:'4 semaines consécutives' },
-  { id:'streak_8',       icon:'💪', name:'Machine',             desc:'8 semaines consécutives' },
-  { id:'pr_10',          icon:'📈', name:'En progression',      desc:'10 PR battus' },
-  { id:'pr_50',          icon:'🏆', name:'Briseur de records',  desc:'50 PR battus' },
-  { id:'vol_100t',       icon:'⚖️', name:'100 tonnes',          desc:'100 000 kg cumulés' },
-  { id:'dev_100',        icon:'🎯', name:'Club des 100',        desc:'100kg au développé couché' },
-  { id:'overall_85',     icon:'⭐', name:'Avancé',              desc:'Overall 85 atteint' },
-  { id:'overall_90',     icon:'👑', name:'Elite',               desc:'Overall 90 atteint' },
-  { id:'gainage_10',     icon:'🛡️', name:'Sangle de fer',       desc:'10 séances de gainage' },
+  { id:'first_session', icon:'⚡', name:'Premier raid',       desc:'Première séance enregistrée' },
+  { id:'streak_4',      icon:'🔥', name:'Sans faille',        desc:'4 semaines consécutives' },
+  { id:'streak_8',      icon:'💪', name:'Machine',            desc:'8 semaines consécutives' },
+  { id:'pr_10',         icon:'📈', name:'En progression',     desc:'10 PR battus' },
+  { id:'pr_50',         icon:'🏆', name:'Briseur de records', desc:'50 PR battus' },
+  { id:'vol_100t',      icon:'⚖️', name:'100 tonnes',         desc:'100 000 kg cumulés' },
+  { id:'dev_100',       icon:'🎯', name:'Club des 100',       desc:'100kg au développé couché' },
+  { id:'overall_85',    icon:'⭐', name:'Avancé',             desc:'Overall 85 atteint' },
+  { id:'overall_90',    icon:'👑', name:'Elite',              desc:'Overall 90 atteint' },
+  { id:'gainage_10',    icon:'🛡️', name:'Sangle de fer',      desc:'10 séances de gainage' },
+  { id:'mobilite_10',   icon:'🧘', name:'Corps souple',       desc:'10 séances de mobilité complètes' },
 ];
 
 // ── FONCTIONS UTILITAIRES ─────────────────────────────────────────────────────
@@ -227,11 +272,10 @@ function calcORM(kg, reps) {
   return Math.round(kg * (1 + reps / 30));
 }
 
-// Poids léger = 70% du top set lourd, arrondi au 2.5kg
 function getSmartWeight(exo, cache, week) {
   if (!exo.refKpi) return null;
   const heavyDay = Object.keys(PROGRAM).find(dk =>
-    PROGRAM[dk].exos.some(e => e.id === exo.refKpi)
+    PROGRAM[dk].exos && PROGRAM[dk].exos.some(e => e.id === exo.refKpi)
   );
   if (!heavyDay) return null;
   for (let w = week; w >= 1; w--) {
@@ -242,7 +286,6 @@ function getSmartWeight(exo, cache, week) {
   return null;
 }
 
-// Progression guidée +2.5kg si dépasse plafond reps
 function calcProgression(exo, kg, reps) {
   if (!kg || !reps) return null;
   const isTopBO = exo.series?.some(s => s.isTop);
@@ -251,7 +294,6 @@ function calcProgression(exo, kg, reps) {
   return null;
 }
 
-// Reco charge bloc hypertrophie
 function calcBlocReco(repsArray) {
   const valid = repsArray.filter(r => r > 0);
   if (valid.length < 3) return null;
@@ -323,13 +365,8 @@ function getSerieInfo(serie, exo) {
   return { label:`Série ${serie.l}`, cls:'iso', range:exo.reps?.iso||[10,15] };
 }
 
-// Détecter automatiquement le jour de la semaine
 function getTodayDayKey() {
-  const dow = new Date().getDay(); // 0=dim, 1=lun...
-  const map = { 1:'lundi', 2:'mardi', 3:'mercredi', 4:null, 5:'vendredi', 6:'samedi', 0:'dimanche' };
+  const dow = new Date().getDay();
+  const map = { 1:'lundi', 2:'mardi', 3:'mercredi', 4:'jeudi', 5:'vendredi', 6:'samedi', 0:'dimanche' };
   return map[dow] || 'lundi';
-
-
-
-
-  
+}
