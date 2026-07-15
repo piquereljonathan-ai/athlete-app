@@ -10,9 +10,8 @@ const S = {
   gainage: { step: 0, phase: 'idle', elapsed: 0, startTime: null, interval: null, completed: 0 },
   mobilite: { step: 0, phase: 'work', elapsed: 0, startTime: null, interval: null, completed: 0 },
   sessionStart: null, sessionInterval: null, sessionDuration: 0,
-  timer: { val: 0, startTime: null, interval: null, running: false },
   wakeLock: null, syncing: false,
-  settings: { theme:'dark', accent:'#F07020', deload:true, plateau:true, balance:true, weight:93, height:193, age:32 },
+  settings: { theme:'light', accent:'#F07020', deload:true, plateau:true, balance:true, weight:93, height:193, age:32 },
   calMonth: { year: new Date().getFullYear(), month: new Date().getMonth() },
   sectionOpen: { gainage: true, abdos: true, cardio: true },
 };
@@ -276,40 +275,6 @@ async function requestWakeLock() {
 }
 function releaseWakeLock() { try { if (S.wakeLock) { S.wakeLock.release(); S.wakeLock = null; } } catch(e) {} }
 
-function startTimer() {
-  clearInterval(S.timer.interval);
-  S.timer.startTime = Date.now(); S.timer.val = 0; S.timer.running = true;
-  S.timer.interval = setInterval(() => { S.timer.val = Math.floor((Date.now() - S.timer.startTime) / 1000); updateTimerUI(); }, 500);
-  updateTimerUI();
-}
-function stopTimer() { clearInterval(S.timer.interval); S.timer.running = false; }
-function resetTimerUI() {
-  S.timer.val = 0; S.timer.startTime = null;
-  const el = document.getElementById('fc-time'); if (el) { el.textContent = '0:00'; el.className = 'fc-time g'; }
-  for (let i = 0; i < 6; i++) { const s = document.getElementById('fcs' + i); if (s) s.className = 'fc-s'; }
-  const ths = document.getElementById('fc-ths');
-  if (ths) ths.innerHTML = '<span class="fc-th th-g">90s</span><span class="fc-th th-a">2min</span><span class="fc-th th-w">3min+</span>';
-}
-function updateTimerUI() {
-  const t = S.timer.val;
-  const m = Math.floor(t / 60), s = t % 60;
-  const el = document.getElementById('fc-time'); if (!el) return;
-  el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-  const isBloc = PROGRAM[S.day]?.exos[S.focusExoIdx]?.isBloc;
-  if (isBloc) {
-    el.className = 'fc-time ' + (t <= 30 ? 'g' : t <= 45 ? 'a' : 'w');
-    const ths = document.getElementById('fc-ths');
-    if (ths) ths.innerHTML = '<span class="fc-th th-g">30s</span><span class="fc-th th-a">45s</span><span class="fc-th th-w">60s+</span>';
-  } else {
-    el.className = 'fc-time ' + (t <= 90 ? 'g' : t <= 180 ? 'a' : 'w');
-  }
-  const pct = isBloc ? Math.min(t / 60, 1) : Math.min(t / 180, 1);
-  for (let i = 0; i < 6; i++) {
-    const seg = document.getElementById('fcs' + i);
-    if (seg) seg.className = 'fc-s ' + (i / 6 < pct ? (t <= (isBloc ? 30 : 90) ? 'g' : 'a') : '');
-  }
-}
-
 function startSessionChrono() {
   if (S.sessionInterval) return;
   S.sessionStart = Date.now();
@@ -476,14 +441,14 @@ function renderSeance() {
     html += `<div class="section-hdr" onclick="toggleSection('gainage')">
       <span class="sh-icon">🛡️</span>
       <span class="sh-label">Gainage</span>
-      <span class="sh-badge gainage">8 min · ${GAINAGE_PROTOCOL.length} exos</span>
+      <span class="sh-badge gainage">~6 min d'effort · ${GAINAGE_PROTOCOL.length} exos</span>
       <span class="sh-toggle">${open ? '▲' : '▼'}</span>
     </div>
     <div class="section-body" id="sec-gainage" style="${open ? '' : 'display:none'}">
       <div class="gainage-row${gainageDone ? ' done' : ''}" onclick="openGainage()">
         <div class="gr-left">
           <div class="gr-name">${gainageDone ? 'Gainage terminé ✓' : 'Démarrer le gainage'}</div>
-          <div class="gr-sub">${gainageDone ? '8 min · ' + GAINAGE_PROTOCOL.length + ' exercices complétés' : GAINAGE_PROTOCOL.slice(0, 3).map(g => g.name.split(' ').slice(0, 2).join(' ')).join(' · ') + '...'}</div>
+          <div class="gr-sub">${gainageDone ? GAINAGE_PROTOCOL.length + ' exercices complétés' : GAINAGE_PROTOCOL.slice(0, 3).map(g => g.name.split(' ').slice(0, 2).join(' ')).join(' · ') + '...'}</div>
         </div>
         <div class="gr-right">
           <span class="gr-prog">${gainageDone ? '✓' : '0/' + GAINAGE_PROTOCOL.length}</span>
@@ -643,36 +608,31 @@ function startGainageTimer() {
     const elapsed = Math.floor((now - S.gainage.startTime) / 1000);
     const current = GAINAGE_PROTOCOL[S.gainage.step];
     if (!current) return;
-    const limit = S.gainage.phase === 'work' ? current.work : current.rest;
     S.gainage.elapsed = elapsed;
-    if (elapsed >= limit) advanceGainage();
-    else updateGainageUI(elapsed, limit);
+    if (elapsed >= current.work) advanceGainage();
+    else updateGainageUI(elapsed, current.work);
   }, 250);
 }
 
 function advanceGainage() {
   stopGainageTimer();
-  const current = GAINAGE_PROTOCOL[S.gainage.step];
-  if (S.gainage.phase === 'work') {
-    playEndBeep();
-    S.gainage.completed++;
-    if (S.gainage.step >= GAINAGE_PROTOCOL.length - 1) {
-      finishGainage(); return;
-    }
-    S.gainage.phase = 'rest';
-    S.gainage.startTime = Date.now();
-    S.gainage.elapsed = 0;
-    renderGainage();
-    startGainageTimer();
-  } else {
-    S.gainage.step++;
-    S.gainage.phase = 'work';
-    S.gainage.startTime = Date.now();
-    S.gainage.elapsed = 0;
-    playStartBeep();
-    renderGainage();
-    startGainageTimer();
+  playEndBeep();
+  S.gainage.completed++;
+  if (S.gainage.step >= GAINAGE_PROTOCOL.length - 1) {
+    finishGainage(); return;
   }
+  S.gainage.step++;
+  S.gainage.phase = 'ready';
+  renderGainage();
+}
+
+function startGainageWork() {
+  S.gainage.phase = 'work';
+  S.gainage.startTime = Date.now();
+  S.gainage.elapsed = 0;
+  playStartBeep();
+  renderGainage();
+  startGainageTimer();
 }
 
 function finishGainage() {
@@ -680,7 +640,7 @@ function finishGainage() {
   S.cache['gainage_' + S.week + '_' + S.day] = '1';
   S.cache['gainage_sessions'] = String((parseInt(S.cache['gainage_sessions'] || '0')) + 1);
   saveLocal();
-  showToast('🛡️ Gainage terminé — 8 min !');
+  showToast('🛡️ Gainage terminé !');
   checkAchievements();
   document.getElementById('gainage-screen').classList.remove('on');
   renderSeance(); updateTopbar();
@@ -690,11 +650,8 @@ function skipGainageStep() {
   stopGainageTimer();
   S.gainage.step++;
   if (S.gainage.step >= GAINAGE_PROTOCOL.length) { finishGainage(); return; }
-  S.gainage.phase = 'work';
-  S.gainage.startTime = Date.now();
-  S.gainage.elapsed = 0;
+  S.gainage.phase = 'ready';
   renderGainage();
-  startGainageTimer();
 }
 
 function updateGainageUI(elapsed, limit) {
@@ -728,30 +685,60 @@ function renderGainage() {
   const totalSteps = GAINAGE_PROTOCOL.length;
   const pctDone = step / totalSteps;
 
+  if (!isWork) {
+    // Phase "ready" : self-paced, pas de décompte — l'utilisateur lance quand il est prêt
+    document.getElementById('g-body').innerHTML = `
+      <div class="g-prog-bar"><div class="g-prog-fill" style="width:${Math.round(pctDone * 100)}%"></div></div>
+      <div class="g-phase">
+        <div class="g-phase-label">Prêt · ${step + 1}/${totalSteps}</div>
+        <div class="g-exo-name">${current.name}</div>
+        <div class="g-exo-sub">Repos à ton rythme · lance quand tu es prêt</div>
+      </div>
+      <div class="g-tip"><div class="g-tip-l">Position</div><div class="g-tip-t">${current.tip}</div></div>
+      <div class="g-series">
+        ${GAINAGE_PROTOCOL.map((g, i) => {
+          const isDone = i < step;
+          const isAct = i === step;
+          return `<div class="g-serie-row${isAct ? ' rest' : isDone ? ' done' : ''}">
+            <span class="g-sn">${i + 1}</span>
+            <span class="g-sname">${g.name}</span>
+            <span class="g-sdur">${isDone ? '✓ ' + g.work + 's' : g.work + 's'}</span>
+            <div class="g-sic" style="background:${isDone ? 'var(--gr-d)' : isAct ? 'var(--gr-d)' : 'var(--bg2)'};color:${isDone ? 'var(--gr)' : isAct ? 'var(--gr)' : 'var(--t4)'}">
+              ${isDone ? '✓' : isAct ? '▶' : '○'}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="g-btn rest-btn" onclick="startGainageWork()">C'est parti — ${current.name}</button>
+        <button style="padding:13px 12px;background:var(--bg1);border:0.5px solid var(--bd);border-radius:8px;font-size:11px;font-weight:700;color:var(--t3);cursor:pointer" onclick="skipGainageStep()">Passer</button>
+      </div>`;
+    return;
+  }
+
   document.getElementById('g-body').innerHTML = `
     <div class="g-prog-bar"><div class="g-prog-fill" style="width:${Math.round(pctDone * 100)}%"></div></div>
     <div class="g-phase">
-      <div class="g-phase-label">${isWork ? 'Effort' : 'Repos'} · ${step + 1}/${totalSteps}</div>
+      <div class="g-phase-label">Effort · ${step + 1}/${totalSteps}</div>
       <div class="g-exo-name">${current.name}</div>
-      <div class="g-exo-sub">${isWork ? `${current.work}s d'effort` : `${current.rest}s de repos · Prépare : ${GAINAGE_PROTOCOL[step + 1]?.name || 'Terminé'}`}</div>
+      <div class="g-exo-sub">${current.work}s d'effort</div>
     </div>
     <div class="g-circle-wrap">
       <svg class="g-svg" viewBox="0 0 110 110">
         <circle class="g-bg" cx="55" cy="55" r="52"/>
-        <circle class="g-fill" cx="55" cy="55" r="52" style="stroke:${isWork ? 'var(--bl)' : 'var(--gr)'};stroke-dashoffset:0"/>
+        <circle class="g-fill" cx="55" cy="55" r="52" style="stroke:var(--bl);stroke-dashoffset:0"/>
       </svg>
       <div class="g-center">
-        <div class="g-time ${isWork ? '' : 'rest'}">${isWork ? current.work : current.rest}</div>
-        <div class="g-time-l">${isWork ? 'sec' : 'repos'}</div>
+        <div class="g-time">${current.work}</div>
+        <div class="g-time-l">sec</div>
       </div>
     </div>
-    ${isWork ? `<div class="g-tip"><div class="g-tip-l">Position</div><div class="g-tip-t">${current.tip}</div></div>` : ''}
+    <div class="g-tip"><div class="g-tip-l">Position</div><div class="g-tip-t">${current.tip}</div></div>
     <div class="g-series">
       ${GAINAGE_PROTOCOL.map((g, i) => {
-        const isDone = i < step || (i === step && !isWork);
-        const isAct = i === step && isWork;
-        const isRest = i === step && !isWork;
-        return `<div class="g-serie-row${isAct ? ' active' : isDone ? ' done' : isRest ? ' rest' : ''}">
+        const isDone = i < step;
+        const isAct = i === step;
+        return `<div class="g-serie-row${isAct ? ' active' : isDone ? ' done' : ''}">
           <span class="g-sn">${i + 1}</span>
           <span class="g-sname">${g.name}</span>
           <span class="g-sdur">${isDone ? '✓ ' + g.work + 's' : g.work + 's'}</span>
@@ -762,9 +749,7 @@ function renderGainage() {
       }).join('')}
     </div>
     <div style="display:flex;gap:8px;margin-top:4px">
-      <button class="g-btn${!isWork ? ' rest-btn' : ''}" onclick="${isWork ? 'advanceGainage()' : 'advanceGainage()'}">
-        ${isWork ? 'Terminer la série' : `Passer au suivant`}
-      </button>
+      <button class="g-btn" onclick="advanceGainage()">Terminer la série</button>
       <button style="padding:13px 12px;background:var(--bg1);border:0.5px solid var(--bd);border-radius:8px;font-size:11px;font-weight:700;color:var(--t3);cursor:pointer" onclick="skipGainageStep()">Passer</button>
     </div>`;
 }
@@ -928,14 +913,13 @@ function openFocus(exoIdx, section) {
   S.focusSerieIdx = getFirstUndone(exoIdx);
   requestWakeLock();
   if (!S.sessionStart) startSessionChrono();
-  resetTimerUI();
   document.getElementById('focus-screen').classList.add('on');
   renderFocus();
 }
 
 function closeFocus() {
   document.getElementById('focus-screen').classList.remove('on');
-  releaseWakeLock(); stopTimer();
+  releaseWakeLock();
   renderSeance(); updateTopbar();
 }
 
@@ -988,7 +972,6 @@ function renderFocus() {
 
   const nextSerie = exo.series[S.focusSerieIdx + 1];
   const nextLabel = nextSerie ? getSerieInfo(nextSerie, exo).label : (navNext ? navNext.name.split(' ')[0] : 'Fin');
-  document.getElementById('fc-next').textContent = nextLabel;
   const btn = document.getElementById('fc-btn');
   if (isLastSerie && isLastExo) { btn.textContent = 'Terminer la séance'; btn.className = 'fc-btn finish'; }
   else if (isLastSerie) { btn.textContent = 'Exercice suivant →'; btn.className = 'fc-btn'; }
@@ -1004,6 +987,7 @@ function renderFocus() {
   const isDone = kg && reps;
   const orm = kg && reps ? calcORM(parseFloat(kg), parseInt(reps)) : 0;
   const progTip = kg && reps ? calcProgression(exo, kg, reps) : null;
+  const tip = TIPS[exo.id] || TIPS[exo.refKpi] || null;
   const suggested = deloadW || smartW || null;
 
   let inCls = 'f-in';
@@ -1042,6 +1026,7 @@ function renderFocus() {
       </div>
       ${progTip ? `<div class="f-prog">🎯 Semaine prochaine : ~${progTip}kg</div>` : ''}
     </div>
+    ${tip ? `<div class="f-tip"><div class="f-tip-l">💡 Tip technique</div><div class="f-tip-t">${tip}</div></div>` : ''}
     <div class="f-note-wrap">
       <textarea class="f-note" placeholder="Notes techniques..." onblur="saveNote('${exo.id}',this.value)">${S.notes[exo.id] || ''}</textarea>
     </div>`;
@@ -1067,6 +1052,7 @@ function renderBlocFocus(exo) {
     return a + k * r;
   }, 0);
   const firstKg = gv(S.week, S.day, exo.id, 0, 'kg') || '';
+  const tip = TIPS[exo.id] || TIPS[exo.refKpi] || null;
   document.getElementById('f-body').innerHTML = `
     <div class="f-bloc-hdr">
       <div class="fbh-title">Mode bloc · Hypertrophie</div>
@@ -1099,7 +1085,8 @@ function renderBlocFocus(exo) {
         <span style="font-size:16px">${reco.type === 'ok' ? '✅' : reco.type === 'up' ? '⬆️' : '⬇️'}</span>
         <div><div class="fbr-t">${reco.text}</div><div class="fbr-s">${reco.sub}</div></div>
       </div>` : ''}
-    </div>`;
+    </div>
+    ${tip ? `<div class="f-tip"><div class="f-tip-l">💡 Tip technique</div><div class="f-tip-t">${tip}</div></div>` : ''}`;
 }
 
 function setBlocKg(val) {
@@ -1116,7 +1103,6 @@ async function handleBlocInput(si, val) {
   const kg = document.getElementById('bloc-kg')?.value || gv(S.week, S.day, exo.id, 0, 'kg');
   if (kg) await upsertSet(S.week, S.day, exo.id, si, 'kg', kg);
   await upsertSet(S.week, S.day, exo.id, si, 'reps', val);
-  if (val) { stopTimer(); startTimer(); }
   S.focusSerieIdx = si; renderFocus(); updateTopbar();
 }
 
@@ -1126,7 +1112,6 @@ async function handleInput(field, val) {
   if (!S.sessionStart) startSessionChrono();
   await upsertSet(S.week, S.day, exo.id, S.focusSerieIdx, field, val);
   if (field === 'reps' && val) {
-    stopTimer(); startTimer();
     if (isPR(exo.id, S.week, S.day, S.focusSerieIdx)) {
       showToast(`PR — ${exo.name} !`);
       const newly = checkAchievements();
@@ -1144,7 +1129,7 @@ function advanceSerie() {
   if (isLastSerie && isLastExo) { closeFocus(); showEndScreen(); return; }
   if (isLastSerie) { S.focusExoIdx++; S.focusSerieIdx = getFirstUndone(S.focusExoIdx); }
   else S.focusSerieIdx++;
-  stopTimer(); resetTimerUI(); renderFocus();
+  renderFocus();
 }
 
 // Swipe
@@ -1158,7 +1143,7 @@ document.addEventListener('touchend', e => {
   if (dx < 0 && S.focusExoIdx < exos.length - 1) { S.focusExoIdx++; S.focusSerieIdx = getFirstUndone(S.focusExoIdx); }
   else if (dx > 0 && S.focusExoIdx > 0) { S.focusExoIdx--; S.focusSerieIdx = getFirstUndone(S.focusExoIdx); }
   else return;
-  stopTimer(); resetTimerUI(); renderFocus();
+  renderFocus();
 }, { passive: true });
 
 // ── HISTORY ───────────────────────────────────────────────────────────────────
@@ -1512,7 +1497,8 @@ function renderSettingsBody() {
     <div class="set-row"><div><div class="set-label">Équilibre push/pull</div><div class="set-sub">Ratio volume musculaire</div></div><div class="toggle${st.balance ? ' on' : ''}" onclick="toggleSetting('balance')"><div class="toggle-knob"></div></div></div>
     <div class="set-section">Données</div>
     <div class="set-row" onclick="exportCSV()"><div><div class="set-label">Exporter en CSV</div><div class="set-sub">Toutes tes séances</div></div><span style="font-size:16px;color:var(--t3)">›</span></div>
-    <div class="set-row" onclick="confirmReset()" style="margin-bottom:30px"><div><div class="set-label">Réinitialiser la semaine</div><div class="set-sub">Efface les données sem. ${S.week}</div></div><span style="font-size:16px;color:var(--re)">›</span></div>`;
+    <div class="set-row" onclick="confirmReset()"><div><div class="set-label">Réinitialiser la semaine</div><div class="set-sub">Efface les données sem. ${S.week}</div></div><span style="font-size:16px;color:var(--re)">›</span></div>
+    <div class="set-row" onclick="confirmResetAll()" style="margin-bottom:30px"><div><div class="set-label">Réinitialiser tout l'historique</div><div class="set-sub">Efface toutes les semaines · irréversible</div></div><span style="font-size:16px;color:var(--re)">›</span></div>`;
 }
 
 function setSetting(key, val) { S.settings[key] = val; saveLocal(); applyTheme(); renderSettingsBody(); }
@@ -1534,6 +1520,21 @@ function confirmReset() {
   saveLocal();
   sb.from('sets').delete().eq('user_id', USER_ID).eq('week', S.week).then(() => {}).catch(() => {});
   renderSeance(); updateTopbar();
+}
+
+async function confirmResetAll() {
+  if (!confirm('Effacer TOUT ton historique (toutes les semaines, tous les exercices) ? Cette action est irréversible.')) return;
+  if (!confirm('Dernière confirmation : toutes tes données seront définitivement perdues. Continuer ?')) return;
+  S.cache = {}; S.notes = {};
+  saveLocal();
+  try {
+    await sb.from('sets').delete().eq('user_id', USER_ID);
+    await sb.from('exercise_notes').delete().eq('user_id', USER_ID);
+    await sb.from('sessions').delete().eq('user_id', USER_ID);
+  } catch(e) {}
+  showToast('Historique réinitialisé');
+  S.week = 1;
+  renderDayBar(); renderSeance(); updateTopbar();
 }
 
 // ── NAV ───────────────────────────────────────────────────────────────────────
@@ -1563,9 +1564,6 @@ async function init() {
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      if (S.timer.running && S.timer.startTime) {
-        S.timer.val = Math.floor((Date.now() - S.timer.startTime) / 1000); updateTimerUI();
-      }
       if (!S.wakeLock && (
         document.getElementById('focus-screen').classList.contains('on') ||
         document.getElementById('gainage-screen').classList.contains('on')
