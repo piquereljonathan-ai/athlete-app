@@ -70,7 +70,7 @@ const PROGRAM = {
   lundi:{
     label:'Lun', name:'Pull Lourd', sub:'Dos · Biceps', type:'h',
     exos:[
-      { id:'tractions_lestees', name:'Tractions lestées',         kpi:true, note:'Poids de lest libre · prise large · départ 15kg',
+      { id:'tractions_lestees', name:'Tractions lestées',         kpi:true, note:'Poids de lest libre · prise large',
         series:iso(4), reps:{iso:[5,6]} },
       { id:'rowing_unilat',    name:'Rowing machine (bras/bras)', kpi:true, note:'Un poids = 2 bras',
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
@@ -94,7 +94,7 @@ const PROGRAM = {
   mardi:{
     label:'Mar', name:'Push Lourd', sub:'Pecs · Épaules · Triceps', type:'h',
     exos:[
-      { id:'dips_lestes',      name:'Dips lestés',                kpi:true, note:'Poids de lest libre · départ 10kg',
+      { id:'dips_lestes',      name:'Dips lestés',                kpi:true, note:'Poids de lest libre',
         series:iso(4), reps:{iso:[5,6]} },
       { id:'dev_couche',       name:'Développé couché',           kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
@@ -131,9 +131,9 @@ const PROGRAM = {
         series:iso(3), reps:{iso:[6,8]}, note:'Guidées à la barre smith · lourd' },
       { id:'hip_thrust',         name:'Hip thrust',                 kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'abducteurs',         name:'Abducteurs',                 supersetGroup:'B', supersetLabel:'SS B',
+      { id:'abducteurs',         name:'Abducteurs',
         series:iso(2), reps:{iso:[12,15]} },
-      { id:'mollets',            name:'Mollets machine',            supersetGroup:'B', supersetLabel:'SS B',
+      { id:'mollets',            name:'Mollets machine',
         series:iso(2), reps:{iso:[12,15]} },
     ],
     abdosExos:[
@@ -204,6 +204,8 @@ const PROGRAM = {
     label:'Dim', name:'Legs Léger', sub:'Jambes · Abdos', type:'c',
     gainage:true, abdos:true,
     exos:[
+      { id:'leg_curl_l',         name:'Leg curl',                 refKpi:'leg_curl', note:'Échauffement',
+        series:iso(3), reps:{iso:[12,15]} },
       { id:'hack_squat_l',       name:'Hack squat',               refKpi:'hack_squat',
         series:iso(3), reps:{iso:[12,15]} },
       { id:'leg_press_unilat',   name:'Leg press unilatéral',     refKpi:'leg_press', note:'1 jambe à la fois · amplitude complète · corrige les déséquilibres',
@@ -214,12 +216,10 @@ const PROGRAM = {
         series:iso(3), reps:{iso:[10,12]} },
       { id:'leg_ext_l',          name:'Leg extension',            refKpi:'leg_ext',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'leg_curl_l',         name:'Leg curl',                 refKpi:'leg_curl', supersetGroup:'B', supersetLabel:'SS B',
-        series:iso(3), reps:{iso:[12,15]} },
-      { id:'mollets_l',          name:'Mollets machine',          refKpi:'mollets', supersetGroup:'B', supersetLabel:'SS B',
-        series:iso(2), reps:{iso:[12,15]} },
       { id:'abducteurs_l',       name:'Abducteurs',
         series:iso(3), reps:{iso:[12,15]} },
+      { id:'mollets_l',          name:'Mollets machine',          refKpi:'mollets',
+        series:iso(2), reps:{iso:[12,15]} },
     ],
     abdosExos:[
       { id:'crunchs_d',          name:'Crunchs machine',          series:iso(3), reps:{iso:[15,20]} },
@@ -251,8 +251,8 @@ const MILESTONES = {
   leg_press:    [{kg:100,l:'100kg'},{kg:150,l:'150kg'},{kg:200,l:'200kg'},{kg:250,l:'250kg'}],
   curl_halt:    [{kg:14,l:'14kg'},{kg:18,l:'18kg'},{kg:22,l:'22kg'},{kg:26,l:'26kg'}],
   elev_lat:     [{kg:12,l:'12kg'},{kg:16,l:'16kg'},{kg:20,l:'20kg'},{kg:24,l:'24kg'}],
-  tractions_lestees: [{kg:15,l:'15kg'},{kg:20,l:'20kg'},{kg:25,l:'25kg'},{kg:30,l:'30kg'}],
-  dips_lestes:  [{kg:10,l:'10kg'},{kg:15,l:'15kg'},{kg:20,l:'20kg'},{kg:25,l:'25kg'}],
+  tractions_lestees: [{kg:5,l:'5kg'},{kg:10,l:'10kg'},{kg:15,l:'15kg'},{kg:20,l:'20kg'},{kg:25,l:'25kg'},{kg:30,l:'30kg'}],
+  dips_lestes:  [{kg:5,l:'5kg'},{kg:10,l:'10kg'},{kg:15,l:'15kg'},{kg:20,l:'20kg'},{kg:25,l:'25kg'}],
 };
 
 // ── TIPS TECHNIQUE (exercices muscu) ──────────────────────────────────────────
