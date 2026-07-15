@@ -61,7 +61,7 @@ const CARDIO_PRESETS = {
 };
 
 // ── HELPERS SÉRIES ────────────────────────────────────────────────────────────
-const BASE_H = [{ l:'Top',isTop:true },{ l:'BO1',isBO:true },{ l:'BO2',isBO:true }];
+const BASE_H = [{ l:'Top',isTop:true },{ l:'BO1',isBO:true }];
 const iso = n => Array.from({length:n},(_,i)=>({l:`${i+1}`}));
 
 // ── PROGRAMME ─────────────────────────────────────────────────────────────────
@@ -70,18 +70,20 @@ const PROGRAM = {
   lundi:{
     label:'Lun', name:'Pull Lourd', sub:'Dos · Biceps', type:'h',
     exos:[
-      { id:'tirage_serre',     name:'Tirage serré',               kpi:true,
-        series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
+      { id:'tractions_lestees', name:'Tractions lestées',         kpi:true, note:'Poids de lest libre · prise large · départ 15kg',
+        series:iso(4), reps:{iso:[5,6]} },
       { id:'rowing_unilat',    name:'Rowing machine (bras/bras)', kpi:true, note:'Un poids = 2 bras',
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
       { id:'tirage_vert_u',    name:'Tirage vertical unilatéral', note:'Bras par bras',
-        series:iso(4), reps:{iso:[10,15]} },
+        series:iso(3), reps:{iso:[10,15]} },
       { id:'tirage_horiz',     name:'Tirage horizontal',
-        series:iso(4), reps:{iso:[10,15]} },
+        series:iso(3), reps:{iso:[10,15]} },
       { id:'pullover',         name:'Pull over poulie haute',
-        series:iso(4), reps:{iso:[10,15]} },
-      { id:'curl_halt',        name:'Curl haltères',
-        series:iso(4), reps:{iso:[10,15]} },
+        series:iso(3), reps:{iso:[10,15]} },
+      { id:'curl_halt',        name:'Curl haltères',              supersetGroup:'C', supersetLabel:'SS C',
+        series:iso(3), reps:{iso:[10,15]} },
+      { id:'curl_barre',       name:'Curl barre (17kg)',          supersetGroup:'C', supersetLabel:'SS C', note:'Enchaîné juste après curl haltères · 17kg fixe',
+        series:iso(3), reps:{iso:[8,12]} },
     ],
     abdosExos:[
       { id:'leg_raises_lun',   name:'Leg raises',    series:iso(3), reps:{iso:[12,15]}, note:'Jambes tendues · montée lente · bas du ventre' },
@@ -92,11 +94,13 @@ const PROGRAM = {
   mardi:{
     label:'Mar', name:'Push Lourd', sub:'Pecs · Épaules · Triceps', type:'h',
     exos:[
+      { id:'dips_lestes',      name:'Dips lestés',                kpi:true, note:'Poids de lest libre · départ 10kg',
+        series:iso(4), reps:{iso:[5,6]} },
       { id:'dev_couche',       name:'Développé couché',           kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
       { id:'dev_incline',      name:'Développé incliné',          kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'dev_militaire',    name:'Développé militaire machine',kpi:true,
+      { id:'dev_militaire',    name:'Développé militaire machine',kpi:true, note:'Fatigue actuelle sur ce mouvement · charge réduite temporairement',
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
       { id:'pec_deck',         name:'Pec deck',
         series:iso(3), reps:{iso:[10,15]} },
@@ -105,7 +109,7 @@ const PROGRAM = {
       { id:'elev_lat',         name:'Élévations latérales',       kpi:true,
         series:iso(3), reps:{iso:[12,15]} },
       { id:'triceps_poulie',   name:'Triceps poulie corde',
-        series:iso(4), reps:{iso:[10,15]} },
+        series:iso(3), reps:{iso:[10,15]} },
     ],
     abdosExos:[
       { id:'leg_raises_mar',   name:'Leg raises',    series:iso(3), reps:{iso:[12,15]}, note:'Jambes tendues · montée lente · bas du ventre' },
@@ -117,18 +121,16 @@ const PROGRAM = {
     label:'Mer', name:'Legs Lourd', sub:'Jambes · Gainage', type:'h',
     gainage:true,
     exos:[
+      { id:'leg_curl',           name:'Leg curl',                   note:'Échauffement · montée progressive avant le hack squat',
+        series:iso(4), reps:{iso:[10,15]} },
       { id:'hack_squat',         name:'Hack squat',                 kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'leg_press',          name:'Leg press',                  kpi:true,
+      { id:'leg_press',          name:'Leg press unilatéral',       kpi:true, note:'Unilatéral · meilleure amplitude de hanche',
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
+      { id:'fentes_bulgares_smith', name:'Fentes bulgares guidées (Smith machine)',
+        series:iso(3), reps:{iso:[6,8]}, note:'Guidées à la barre smith · lourd' },
       { id:'hip_thrust',         name:'Hip thrust',                 kpi:true,
         series:BASE_H, reps:{top:[6,8],bo:[10,12]} },
-      { id:'rdl',                name:'Romanian Deadlift (RDL)',
-        series:iso(3), reps:{iso:[10,12]}, note:'Dos droit · hanches arrière · sens l\'étirement ischios/fessiers' },
-      { id:'leg_curl',           name:'Leg curl',                   supersetGroup:'A', supersetLabel:'SS A',
-        series:iso(2), reps:{iso:[10,15]} },
-      { id:'cable_kickback_mer', name:'Cable kickback',             supersetGroup:'A', supersetLabel:'SS A',
-        series:iso(2), reps:{iso:[15,15]}, note:'Concentration fessiers · amplitude complète' },
       { id:'abducteurs',         name:'Abducteurs',                 supersetGroup:'B', supersetLabel:'SS B',
         series:iso(2), reps:{iso:[12,15]} },
       { id:'mollets',            name:'Mollets machine',            supersetGroup:'B', supersetLabel:'SS B',
@@ -149,8 +151,8 @@ const PROGRAM = {
     label:'Ven', name:'Pull Léger', sub:'Dos · Biceps · Gainage', type:'l',
     gainage:true,
     exos:[
-      { id:'tirage_serre_l',   name:'Tirage serré',               refKpi:'tirage_serre',
-        series:iso(3), reps:{iso:[12,15]} },
+      { id:'tractions_bw',    name:'Tractions au poids du corps', note:'Tempo lent contrôlé · prise large · maximiser le nombre de reps',
+        series:iso(4), reps:{iso:[10,20]} },
       { id:'rowing_unilat_l',  name:'Rowing machine (bras/bras)', refKpi:'rowing_unilat', note:'Un poids = 2 bras',
         series:iso(3), reps:{iso:[12,15]} },
       { id:'tirage_vert_ul',   name:'Tirage vertical unilatéral', refKpi:'tirage_vert_u', note:'Bras par bras',
@@ -159,8 +161,10 @@ const PROGRAM = {
         series:iso(3), reps:{iso:[12,15]} },
       { id:'pullover_l',       name:'Pull over poulie haute',     refKpi:'pullover',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'curl_halt_l',      name:'Curl haltères',              refKpi:'curl_halt',
-        series:iso(4), reps:{iso:[12,15]} },
+      { id:'curl_halt_l',      name:'Curl haltères',              refKpi:'curl_halt',            supersetGroup:'C', supersetLabel:'SS C',
+        series:iso(3), reps:{iso:[12,15]} },
+      { id:'curl_barre_l',     name:'Curl barre',                 refKpi:'curl_barre',            supersetGroup:'C', supersetLabel:'SS C', note:'Enchaîné juste après curl haltères',
+        series:iso(3), reps:{iso:[10,15]} },
       { id:'rear_delt_l',      name:'Oiseau / Rear delt',         refKpi:'rear_delt',
         series:iso(3), reps:{iso:[12,15]} },
     ],
@@ -174,6 +178,8 @@ const PROGRAM = {
     label:'Sam', name:'Push Léger', sub:'Pecs · Épaules · Triceps · Abdos', type:'l',
     gainage:true, abdos:true,
     exos:[
+      { id:'dips_bw',          name:'Dips au poids du corps',     note:'Tempo lent contrôlé · maximiser le nombre de reps',
+        series:iso(4), reps:{iso:[10,20]} },
       { id:'dev_couche_bl',    name:'Développé couché',           isBarre:true, isBloc:true,
         series:iso(4), reps:{bloc:[6,15]}, blocZones:[[12,15],[10,13],[8,11],[6,9]] },
       { id:'dev_incline_bl',   name:'Développé incliné',          isBarre:true, isBloc:true,
@@ -206,10 +212,8 @@ const PROGRAM = {
         series:iso(3), reps:{iso:[12,15]} },
       { id:'fentes_dim',         name:'Fentes bulgares',
         series:iso(3), reps:{iso:[10,12]} },
-      { id:'leg_ext_l',          name:'Leg extension',            refKpi:'leg_ext', supersetGroup:'A', supersetLabel:'SS A',
+      { id:'leg_ext_l',          name:'Leg extension',            refKpi:'leg_ext',
         series:iso(3), reps:{iso:[12,15]} },
-      { id:'cable_kickback_dim', name:'Cable kickback',           supersetGroup:'A', supersetLabel:'SS A',
-        series:iso(3), reps:{iso:[15,15]}, note:'Concentration fessiers · amplitude complète' },
       { id:'leg_curl_l',         name:'Leg curl',                 refKpi:'leg_curl', supersetGroup:'B', supersetLabel:'SS B',
         series:iso(3), reps:{iso:[12,15]} },
       { id:'mollets_l',          name:'Mollets machine',          refKpi:'mollets', supersetGroup:'B', supersetLabel:'SS B',
@@ -227,13 +231,14 @@ const PROGRAM = {
 
 // ── KPI EXERCICES ─────────────────────────────────────────────────────────────
 const KPI_EXOS = [
-  { id:'tirage_serre',   name:'Tirage serré',     day:'lundi' },
+  { id:'tractions_lestees', name:'Tractions lestées', day:'lundi' },
   { id:'dev_couche',     name:'Dév. couché',      day:'mardi' },
   { id:'dev_incline',    name:'Dév. incliné',     day:'mardi' },
   { id:'dev_militaire',  name:'Dév. militaire',   day:'mardi' },
+  { id:'dips_lestes',    name:'Dips lestés',      day:'mardi' },
   { id:'hack_squat',     name:'Hack squat',       day:'mercredi' },
   { id:'hip_thrust',     name:'Hip thrust',       day:'mercredi' },
-  { id:'leg_press',      name:'Leg press',        day:'mercredi' },
+  { id:'leg_press',      name:'Leg press unilatéral', day:'mercredi' },
 ];
 
 // ── PALIERS ───────────────────────────────────────────────────────────────────
@@ -244,10 +249,43 @@ const MILESTONES = {
   hack_squat:   [{kg:60,l:'60kg'},{kg:80,l:'80kg'},{kg:100,l:'100kg'},{kg:130,l:'130kg'}],
   hip_thrust:   [{kg:80,l:'80kg'},{kg:100,l:'100kg'},{kg:130,l:'130kg'},{kg:160,l:'160kg'}],
   leg_press:    [{kg:100,l:'100kg'},{kg:150,l:'150kg'},{kg:200,l:'200kg'},{kg:250,l:'250kg'}],
-  tirage_serre: [{kg:40,l:'40kg'},{kg:60,l:'60kg'},{kg:80,l:'80kg'},{kg:100,l:'100kg'}],
   curl_halt:    [{kg:14,l:'14kg'},{kg:18,l:'18kg'},{kg:22,l:'22kg'},{kg:26,l:'26kg'}],
   elev_lat:     [{kg:12,l:'12kg'},{kg:16,l:'16kg'},{kg:20,l:'20kg'},{kg:24,l:'24kg'}],
-  rdl:          [{kg:40,l:'40kg'},{kg:60,l:'60kg'},{kg:80,l:'80kg'},{kg:100,l:'100kg'}],
+  tractions_lestees: [{kg:15,l:'15kg'},{kg:20,l:'20kg'},{kg:25,l:'25kg'},{kg:30,l:'30kg'}],
+  dips_lestes:  [{kg:10,l:'10kg'},{kg:15,l:'15kg'},{kg:20,l:'20kg'},{kg:25,l:'25kg'}],
+};
+
+// ── TIPS TECHNIQUE (exercices muscu) ──────────────────────────────────────────
+const TIPS = {
+  tractions_lestees: 'Rétracte les omoplates avant de tirer · menton passe la barre · descente contrôlée',
+  tractions_bw:       'Prise large · tempo lent contrôlé · monte jusqu\'au menton au-dessus de la barre',
+  rowing_unilat:      'Dos gainé · tire avec le coude, pas le bras · pause 1s en contraction',
+  tirage_vert_u:      'Poitrine sortie · tire vers le bas des côtes · évite de tirer avec les biceps',
+  tirage_horiz:       'Buste fixe · tire les coudes vers l\'arrière · pas d\'à-coups avec le dos',
+  pullover:           'Coudes légèrement fléchis et fixes · étire bien en haut avant de revenir',
+  curl_halt:          'Coudes fixes le long du corps · pas d\'élan · contrôle la descente',
+  curl_barre:         'Prise à largeur d\'épaules · évite de cambrer le dos pour finir la rep',
+  dips_lestes:        'Buste légèrement penché en avant · descends jusqu\'à 90° de coude · épaules basses',
+  dips_bw:            'Tempo lent contrôlé · descends jusqu\'à sentir l\'étirement pec/épaule',
+  dev_couche:         'Omoplates rétractées et fixes · trajectoire légèrement en diagonale · touche la poitrine',
+  dev_couche_bl:      'Omoplates rétractées et fixes · trajectoire légèrement en diagonale · touche la poitrine',
+  dev_incline:        'Banc à 30-45° max · évite de trop monter en épaules',
+  dev_incline_bl:     'Banc à 30-45° max · évite de trop monter en épaules',
+  dev_militaire:      'Gaine les abdos · pousse dans l\'axe · évite de cambrer le bas du dos',
+  pec_deck:           'Amplitude complète · pause en contraction · évite de balancer le buste',
+  rear_delt:          'Coudes légèrement fléchis · tire avec les épaules, pas le trapèze',
+  elev_lat:           'Légère flexion des coudes · monte jusqu\'à hauteur d\'épaule · pas d\'élan du buste',
+  triceps_poulie:     'Coudes fixes collés au corps · extension complète · pas de bascule du buste',
+  leg_curl:           'Bassin plaqué au banc · contraction complète en haut · descente contrôlée',
+  hack_squat:         'Pieds à largeur d\'épaules · descends jusqu\'à 90° · genoux dans l\'axe des pieds',
+  leg_press:          'Amplitude complète sans décoller le bas du dos · ne verrouille pas les genoux en haut',
+  fentes_bulgares_smith: 'Pied arrière surélevé · buste droit · descends jusqu\'à effleurer le genou au sol',
+  fentes_dim:         'Buste droit · pas trop long · genou avant aligné avec la cheville',
+  hip_thrust:         'Menton rentré · pousse par les talons · contraction max des fessiers en haut',
+  abducteurs:         'Buste droit · mouvement contrôlé · évite de tricher avec le bassin',
+  abducteurs_l:       'Buste droit · mouvement contrôlé · évite de tricher avec le bassin',
+  mollets:            'Amplitude complète · pause en étirement bas · pas de rebond',
+  leg_ext:            'Dos plaqué au dossier · pause 1s en haut · descente contrôlée',
 };
 
 // ── ACHIEVEMENTS ──────────────────────────────────────────────────────────────
@@ -369,4 +407,3 @@ function getTodayDayKey() {
   const dow = new Date().getDay();
   const map = { 1:'lundi', 2:'mardi', 3:'mercredi', 4:'jeudi', 5:'vendredi', 6:'samedi', 0:'dimanche' };
   return map[dow] || 'lundi';
-}
